@@ -3,6 +3,7 @@ import fs from 'node:fs';
 const rawVerified=JSON.parse(fs.readFileSync(new URL('../data/verified-listings.json',import.meta.url),'utf8'));
 const allowedSources=new Set(['メルカリ','Yahoo!フリマ','Yahoo!オークション']);
 const allowedHosts=new Set(['jp.mercari.com','paypayfleamarket.yahoo.co.jp','auctions.yahoo.co.jp']);
+const anilistEnabled=String(process.env.ANILIST_METADATA_ENABLED||'true').toLowerCase()!=='false';
 const aliases={
   アクスタ:['アクスタ','アクリルスタンド','アクリルフィギュア'],
   グリ缶:['グリ缶','グリッター缶バッジ'],
@@ -67,7 +68,7 @@ function localSuggestions(q){
   return out.slice(0,6);
 }
 async function anilistSuggestions(q){
-  const s=normalizeQuery(q);if(s.length<2)return[];
+  const s=normalizeQuery(q);if(!anilistEnabled||s.length<2)return[];
   const query=`query($s:String){Page(page:1,perPage:5){media(search:$s){type isAdult title{native romaji english}} characters(search:$s){name{full native}}}}`;
   const d=await fetchJson('https://graphql.anilist.co',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({query,variables:{s}})});
   const p=d.data?.Page||{};const out=[];
