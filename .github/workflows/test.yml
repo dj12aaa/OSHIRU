@@ -13,4 +13,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm test
+      - name: Syntax checks
+        run: |
+          node --check app.js
+          node --check api/_core.mjs
+          node --check api/search.js
+          node --check api/suggest.js
+      - name: Unit and public safety tests
+        run: npm test
