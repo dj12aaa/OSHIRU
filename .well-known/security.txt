@@ -1,0 +1,4 @@
+Contact: https://oshiruoshi.vercel.app/contact.html
+Expires: 2027-08-10T00:00:00Z
+Preferred-Languages: ja, en
+Canonical: https://oshiruoshi.vercel.app/.well-known/security.txt
