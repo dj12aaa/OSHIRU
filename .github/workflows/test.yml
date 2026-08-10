@@ -16,8 +16,10 @@ jobs:
       - name: Syntax checks
         run: |
           node --check app.js
+          node --check contact.js
           node --check api/_core.mjs
           node --check api/search.js
           node --check api/suggest.js
+          node --check api/contact-email.js
       - name: Unit and public safety tests
         run: npm test
