@@ -11,12 +11,11 @@
   <meta property="og:site_name" content="OSHIRU">
   <meta property="og:title" content="OSHIRU | 推し活グッズ横断検索・価格比較">
   <meta property="og:description" content="推し活グッズを一度の検索で比較。価格・送料・販売状況を横断確認。">
-  <meta property="og:image" content="/og.png">
-  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:card" content="summary">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/icon-192.png">
   <link rel="stylesheet" href="/styles.css">
-<link rel="manifest" href="/manifest.webmanifest"></head>
+  <link rel="manifest" href="/manifest.webmanifest">
+</head>
 <body>
 <a class="skip-link" href="#results">検索結果へ移動</a>
 <header class="site-header">
@@ -26,7 +25,6 @@
     <button id="favoritesBtn" class="favorite-head">♡ <span>お気に入り</span><b id="favCount">0</b></button>
   </div>
 </header>
-
 <main>
   <section class="search-hero">
     <div class="hero-copy">
@@ -51,7 +49,6 @@
       </div>
     </div>
   </section>
-
   <section class="source-strip" aria-label="検索対象">
     <div><span class="source-dot mercari"></span><b>メルカリ</b></div>
     <div><span class="source-dot yflea"></span><b>Yahoo!フリマ</b></div>
@@ -59,74 +56,25 @@
     <div><span class="source-dot shop"></span><b>通販API</b><small>設定時</small></div>
     <div class="strip-note">検索結果は取得元・確認日時を表示します</div>
   </section>
-
   <div class="beta-bar"><b>公開β版：</b>OSHIRUは各販売サイトの公式サービスではありません。価格・在庫・送料・商品状態は変動するため、購入前に必ず販売元の個別商品ページで最新情報をご確認ください。画像は利用条件を確認できる取得元のみ表示します。</div>
-
   <section class="workspace" id="results">
     <aside class="filter-panel">
       <div class="filter-head"><h2>絞り込み</h2><button id="resetBtn">リセット</button></div>
-      <div class="filter-group">
-        <label class="filter-label">販売サイト</label>
-        <div id="sourceFilters" class="source-filters"></div>
-      </div>
-      <div class="filter-group">
-        <label class="filter-label" for="typeFilter">グッズ種別</label>
-        <select id="typeFilter"><option value="">すべて</option><option>アクスタ</option><option>缶バッジ</option><option>ぬい</option><option>フィギュア</option><option>カード</option><option>通販</option><option>交換投稿</option></select>
-      </div>
-      <div class="filter-group">
-        <label class="filter-label" for="collabFilter">コラボ</label>
-        <select id="collabFilter"><option value="">すべて</option></select>
-      </div>
-      <div class="filter-group">
-        <div class="range-label"><span>実質支払額</span><b id="maxPriceLabel">¥15,000以下</b></div>
-        <input id="maxPrice" type="range" min="500" max="30000" value="15000" step="500">
-      </div>
-      <div class="filter-group checks">
-        <label><input id="liveOnly" type="checkbox" checked> 購入・取引可能候補のみ</label>
-        <label><input id="imageOnly" type="checkbox"> 画像を取得できる商品のみ</label>
-        <label><input id="includeEnded" type="checkbox"> 終了済みも表示</label>
-      </div>
-      <div class="watch-card" id="watch">
-        <div class="watch-icon">⌁</div>
-        <div><b>この検索を保存</b><p>同じ条件をすぐ呼び出せます。</p></div>
-        <button id="saveWatchBtn">保存</button>
-      </div>
+      <div class="filter-group"><label class="filter-label">販売サイト</label><div id="sourceFilters" class="source-filters"></div></div>
+      <div class="filter-group"><label class="filter-label" for="typeFilter">グッズ種別</label><select id="typeFilter"><option value="">すべて</option><option>アクスタ</option><option>缶バッジ</option><option>ぬい</option><option>フィギュア</option><option>カード</option><option>通販</option><option>交換投稿</option></select></div>
+      <div class="filter-group"><label class="filter-label" for="collabFilter">コラボ</label><select id="collabFilter"><option value="">すべて</option></select></div>
+      <div class="filter-group"><div class="range-label"><span>実質支払額</span><b id="maxPriceLabel">¥15,000以下</b></div><input id="maxPrice" type="range" min="500" max="30000" value="15000" step="500"></div>
+      <div class="filter-group checks"><label><input id="liveOnly" type="checkbox" checked> 購入・取引可能候補のみ</label><label><input id="imageOnly" type="checkbox"> 画像を取得できる商品のみ</label><label><input id="includeEnded" type="checkbox"> 終了済みも表示</label></div>
+      <div class="watch-card" id="watch"><div class="watch-icon">⌁</div><div><b>この検索を保存</b><p>同じ条件をすぐ呼び出せます。</p></div><button id="saveWatchBtn">保存</button></div>
       <div id="watchList" class="watch-list"></div>
     </aside>
-
     <section class="result-area">
-      <div class="result-top">
-        <div>
-          <div class="result-title-row"><h2 id="resultTitle">横断検索結果</h2><span id="queryBadge" class="query-badge"></span></div>
-          <p id="resultMeta" class="result-meta">検索しています…</p>
-        </div>
-        <div class="result-controls">
-          <button id="mobileFilterBtn" class="mobile-filter">絞り込み</button>
-          <select id="sort"><option value="relevance">おすすめ順</option><option value="price">実質価格が安い順</option><option value="source">販売サイト順</option><option value="new">確認日時が新しい順</option></select>
-        </div>
-      </div>
-
-      <div id="stats" class="stats-row"></div>
-      <div id="providerNotice" class="provider-notice hidden"></div>
-      <div id="productGrid" class="product-grid" aria-live="polite"></div>
-      <div id="emptyState" class="empty-state hidden"></div>
+      <div class="result-top"><div><div class="result-title-row"><h2 id="resultTitle">横断検索結果</h2><span id="queryBadge" class="query-badge"></span></div><p id="resultMeta" class="result-meta">検索しています…</p></div><div class="result-controls"><button id="mobileFilterBtn" class="mobile-filter">絞り込み</button><select id="sort"><option value="relevance">おすすめ順</option><option value="price">実質価格が安い順</option><option value="source">販売サイト順</option><option value="new">確認日時が新しい順</option></select></div></div>
+      <div id="stats" class="stats-row"></div><div id="providerNotice" class="provider-notice hidden"></div><div id="productGrid" class="product-grid" aria-live="polite"></div><div id="emptyState" class="empty-state hidden"></div>
     </section>
   </section>
 </main>
-<footer class="site-footer">
-  <div class="footer-inner">
-    <div><div class="footer-brand">OSHIRU</div><div class="footer-note">推し活グッズの検索・比較を補助する非公式の横断検索サービスです。OSHIRUは商品の販売者・出品者ではなく、各販売サイトおよび権利者との提携を示すものではありません。</div></div>
-    <nav class="footer-links" aria-label="フッターナビゲーション"><a href="/about.html">OSHIRUについて</a><a href="/terms.html">利用規約</a><a href="/privacy.html">プライバシーポリシー</a><a href="/disclaimer.html">免責・広告表示</a><a href="/contact.html">お問い合わせ</a></nav>
-  </div>
-</footer>
-
-<div id="compareTray" class="compare-tray hidden">
-  <div><b><span id="compareCount">0</span>件を比較</b><small>最大4件</small></div>
-  <div><button id="clearCompare">クリア</button><button id="openCompare" class="primary-small">比較表を開く</button></div>
-</div>
-
-<div id="modal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-card"><button id="modalClose" class="modal-close">×</button><div id="modalContent"></div></div></div>
-<div id="toast" class="toast"></div>
-<script src="/app.js"></script>
-</body>
-</html>
+<footer class="site-footer"><div class="footer-inner"><div><div class="footer-brand">OSHIRU</div><div class="footer-note">推し活グッズの検索・比較を補助する非公式の横断検索サービスです。OSHIRUは商品の販売者・出品者ではなく、各販売サイトおよび権利者との提携を示すものではありません。</div></div><nav class="footer-links" aria-label="フッターナビゲーション"><a href="/about.html">OSHIRUについて</a><a href="/terms.html">利用規約</a><a href="/privacy.html">プライバシーポリシー</a><a href="/disclaimer.html">免責・広告表示</a><a href="/contact.html">お問い合わせ</a></nav></div></footer>
+<div id="compareTray" class="compare-tray hidden"><div><b><span id="compareCount">0</span>件を比較</b><small>最大4件</small></div><div><button id="clearCompare">クリア</button><button id="openCompare" class="primary-small">比較表を開く</button></div></div>
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-card"><button id="modalClose" class="modal-close">×</button><div id="modalContent"></div></div></div><div id="toast" class="toast"></div><script src="/app.js"></script>
+</body></html>
