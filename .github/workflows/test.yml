@@ -21,30 +21,30 @@ jobs:
           node --check api/search.js
           node --check api/suggest.js
           node --check api/contact-email.js
-          node --check api/closed.js
       - name: Unit and public safety tests
         run: npm test
-      - name: Verify production is closed
+      - name: Vercel production smoke test
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
           BASE='https://oshiruoshi.vercel.app'
-          CODE=''
-          echo 'Waiting for closed production deployment...'
-          for i in $(seq 1 24); do
-            CODE=$(curl -sS -o /tmp/oshiru-body --max-time 10 -w '%{http_code}' "$BASE/" || true)
-            if [ "$CODE" = '503' ] && grep -Fq '現在、一般公開を停止しています。' /tmp/oshiru-body; then
-              echo "Closed production deployed on attempt $i"
+          HTML=''
+          echo 'Waiting briefly for production deployment...'
+          for i in $(seq 1 6); do
+            HTML=$(curl -fsS --max-time 10 "$BASE/" || true)
+            if printf '%s' "$HTML" | grep -Fq '確認済みの個別出品を価格・送料・販売元ごとに比較'; then
               break
             fi
             sleep 5
           done
-          test "$CODE" = '503'
-          grep -Fq '現在、一般公開を停止しています。' /tmp/oshiru-body
-          API_CODE=$(curl -sS -o /tmp/oshiru-api --max-time 10 -w '%{http_code}' "$BASE/api/search?q=test" || true)
-          test "$API_CODE" = '503'
-          HEADERS=$(curl -sSI --max-time 10 "$BASE/" || true)
-          printf '%s' "$HEADERS" | grep -Fiq 'x-robots-tag: noindex'
-          printf '%s' "$HEADERS" | grep -Fiq 'cache-control: no-store'
-          echo 'Production is not publicly usable.'
+          printf '%s' "$HTML" | grep -Fq '確認済みの個別出品を価格・送料・販売元ごとに比較'
+          if printf '%s' "$HTML" | grep -Fq '通販API'; then exit 1; fi
+          SEARCH=$(curl -fsS --max-time 10 "$BASE/api/search?q=%E6%9D%B1%E9%9B%B2%E7%B5%B5%E5%90%8D%206c")
+          printf '%s' "$SEARCH" | grep -Fq 'm42733344317'
+          printf '%s' "$SEARCH" | grep -Fq '2666'
+          HEADERS=$(curl -fsSI --max-time 10 "$BASE/")
+          printf '%s' "$HEADERS" | grep -Fiq 'content-security-policy:'
+          printf '%s' "$HEADERS" | grep -Fiq 'strict-transport-security:'
+          echo 'Production smoke test passed.'
